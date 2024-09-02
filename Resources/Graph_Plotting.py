@@ -1,39 +1,25 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from openpyxl import Workbook
 
-def graph_plotting(x):
-    
-    # Set the sheet name and y label
-    if x == "Population (Africa)":
-        area = "Africa"
-    elif x == "Population (Central America)":
-        area = "Central America"
-    elif x == "Population (Carribean-Latin)":
-        area = "Latin America"
-    elif x == "Population (South America)":
-        area = "South America"
-    elif x == "Population (Asia)":
-        area = "Asia"
-    elif x == "Population (Oceania)":
-        area = "Oceania"
-    elif x == "Population (Polynesia)":
-        area = "Polynesia"
-    elif x == "Population (Europe)":
-        area = "Europe"
+def graph_plotting(excel_sheet,sheet_name,x,y):
 
     # Reading the Excel file
-    df = pd.read_excel(r'Population_From_2019_2023.xlsx', sheet_name=x)
+    try:
+        df = pd.read_excel(excel_sheet, sheet_name=sheet_name)
+    except:
+        wb = Workbook()
+        wb.save('Data_Sample.xlsx')
 
     # Creating the scatter plot
-    plt.scatter(df["Year"], df[area])
+    plt.scatter(df[x], df[y])
 
     # Adding labels and title
-    plt.xlabel("Year")
-    plt.ylabel(area)
-    plt.title(f'Populations In {area} During Covid Times')
+    plt.xlabel(x)
+    plt.ylabel(y)
+    plt.title(f'Populations In {y} During Covid Times')
 
     # Displaying the plot
     plt.show()
 
-
-graph_plotting("Population (Asia)")
+graph_plotting(r'Population_From_2019_2023.xlsx', 'Population', 'Year', 'Africa')

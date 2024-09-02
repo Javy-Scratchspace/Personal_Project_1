@@ -1,4 +1,4 @@
-x = 98-83
+x = 84
 
 if x == 15:
     print("x is equal to 15")
@@ -12,9 +12,9 @@ elif x != 15:
 
 # Fun math shit
 
-a = 7
+a = 8
 
-b = 3
+b = 9
 
 type = "Subtract" # Options: Add, Subtract, Multiply, Divide
 
