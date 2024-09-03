@@ -1,4 +1,6 @@
 # Executable_File.py
+# pyinstaller --onefile Scatter_Plot_Generator.py
+
 
 import tkinter as tk
 from tkinter import ttk

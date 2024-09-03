@@ -1,3 +1,7 @@
+# Graph_Plotting.py
+# py file used to calculate, make, and save images of scatter plots depending on data
+# @author: Javier Cuevas
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import tkinter as tk
@@ -21,22 +25,22 @@ def graph_plotting(df,x,y):
 
 def tkinter_plotting(root,df,x,y):
 
-    a, b = np.polyfit(x ,y, 1)
+    a, b = np.polyfit(df[x] ,df[y], 1)
 
     plt.scatter(df[x], df[y])
-    plt.plot(x, a*x + b, color = "red")
+    plt.plot(df[x], a*df[x] + b, color = "red")
     plt.xlabel(x)
     plt.ylabel(y)
     plt.title(f'{x} vs. {y} graph')
     plt.savefig(f'{x}_vs_{y}.png')
 
-    img = Image.open(f'{x}_vs_{y}.png')
-    photo = ImageTk.PhotoImage(img)
+    # img = Image.open(f'{x}_vs_{y}.png')
+    # photo = ImageTk.PhotoImage(img)
 
-    # Display the image on the canvas
-    canvas = tk.Canvas(root, width=300, height=200)
-    canvas.pack
-    canvas.create_image(0, 0, anchor=tk.NW, image=photo)  #HACK: For some reason, without the canvas addition it won't even save an image
+    # # Display the image on the canvas
+    # canvas = tk.Canvas(root, width=300, height=200)
+    # canvas.pack
+    # canvas.create_image(0, 0, anchor=tk.NW, image=photo)  #HACK: For some reason, without the canvas addition it won't even save an image
 
     
 
