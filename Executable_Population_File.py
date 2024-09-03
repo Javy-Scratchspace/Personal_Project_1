@@ -1,8 +1,11 @@
 # Executable_File.py
 
 import tkinter as tk
-from Resources.Graph_Plotting import graph_plotting
-from Resources.Graph_Plotting import reading_files
+from tkinter import ttk
+import pandas as pd
+from openpyxl import Workbook
+from Resources.Graph_Plotting import graph_plotting, tkinter_plotting
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 #TODO: Make this into an executable where I can click populations and see the scatter plot
 #TODO: Make buttons and entries for excel columns
@@ -10,8 +13,8 @@ from Resources.Graph_Plotting import reading_files
 root = tk.Tk()
 root.title("Graph Plotting Calculator")
 
-window_width = 600
-window_height = 400
+window_width = 1000
+window_height = 500
 
 # get the screen dimension
 screen_width = root.winfo_screenwidth()
@@ -24,13 +27,62 @@ center_y = int(screen_height/2 - window_height / 2)
 # set the position of the window to the center of the screen
 root.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
 
-def init():
-    tk.Text(root, height = 8).pack
+def error(e):
+    text.delete("1.0", tk.END)
+    text.insert(tk.END, f"ERROR, Python Output: {e}")
+
+def display_df(df):
+    text.delete("1.0", tk.END)  # Delete previous text
+    text.insert(tk.END, df.to_string())
+
+def reading_files(excel_sheet, sheet_name):
+    # Reading the Excel file
+    try:
+        df = pd.read_excel(excel_sheet, sheet_name = sheet_name)
+
+    except Exception as e:
+        error(e)
+
+    return df
 
 def button_1():
-    reading_files()
+    df = reading_files(excel_file_entry.get(),excel_sheet_entry.get())
+    display_df(df)
 
 def button_2():
-    graph_plotting(r'Population_From_2019_2023.xlsx', 'Population', 'Year', 'Africa')
+    df = reading_files(excel_file_entry.get(),excel_sheet_entry.get())
+    try:
+        tkinter_plotting(root,df,x_column_entry.get(),y_column_entry.get())
+    except Exception as e:
+        error(e)
 
-root = root.mainloop()
+excel_file_var = tk.StringVar()
+excel_file_entry = tk.Entry(root, textvariable = excel_file_var)
+excel_file_entry.pack(padx=10,pady=10)
+excel_file_entry.insert(0, r'Resources/excel_file.xlsx')
+
+excel_sheet_var = tk.StringVar()
+excel_sheet_entry = tk.Entry(root, textvariable = excel_sheet_var)
+excel_sheet_entry.pack(padx=10,pady=10)
+excel_sheet_entry.insert(0, 'Sheet')
+
+x_column_var = tk.StringVar()
+x_column_entry = tk.Entry(root, textvariable = x_column_var)
+x_column_entry.pack(padx=10,pady=10)
+x_column_entry.insert(0, 'x_column')
+
+y_column_var = tk.StringVar()
+y_column_entry = tk.Entry(root, textvariable = y_column_var)
+y_column_entry.pack(padx=10,pady=10)
+y_column_entry.insert(0, 'y_column')
+
+button1 = ttk.Button(root, text="Read Excel File", command=button_1)
+button1.pack(padx=10,pady=10)
+
+button2 = ttk.Button(root, text="Plot Graphs", command=button_2)
+button2.pack(padx=10,pady=10)
+
+text = tk.Text(root, height = 8)
+text.pack(expand=True, fill='both')
+
+root.mainloop()
