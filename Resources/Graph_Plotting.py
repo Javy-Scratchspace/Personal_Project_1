@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from PIL import Image, ImageTk
+import numpy as np
         
 def graph_plotting(df,x,y):
 
@@ -20,10 +21,13 @@ def graph_plotting(df,x,y):
 
 def tkinter_plotting(root,df,x,y):
 
+    a, b = np.polyfit(x ,y, 1)
+
     plt.scatter(df[x], df[y])
+    plt.plot(x, a*x + b, color = "red")
     plt.xlabel(x)
     plt.ylabel(y)
-    plt.title(f'Populations In {y} During Covid Times')
+    plt.title(f'{x} vs. {y} graph')
     plt.savefig(f'{x}_vs_{y}.png')
 
     img = Image.open(f'{x}_vs_{y}.png')
@@ -32,10 +36,8 @@ def tkinter_plotting(root,df,x,y):
     # Display the image on the canvas
     canvas = tk.Canvas(root, width=300, height=200)
     canvas.pack
-    image = canvas.create_image(0, 0, anchor=tk.NW, image=photo)
-    canvas.delete(image)
+    canvas.create_image(0, 0, anchor=tk.NW, image=photo)  #HACK: For some reason, without the canvas addition it won't even save an image
 
-    return image
     
 
 
