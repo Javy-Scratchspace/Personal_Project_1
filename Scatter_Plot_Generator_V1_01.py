@@ -1,5 +1,5 @@
 # Scatter_Plot_Generator.py
-# pyinstaller --onefile Scatter_Plot_Generator.py
+# pyinstaller --onefile Scatter_Plot_Generator_V1_01.py
 # @author: Javier Cuevas
 
 import tkinter as tk
